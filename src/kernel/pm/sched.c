@@ -94,11 +94,16 @@ PUBLIC void yield(void)
 		if (p->state != PROC_READY)
 			continue;
 		
+		int priorityOfP = p->priority + p->nice;
+		int priorityOfNext = next->priority + next->nice;
+
 		/*
 		 * Process with higher
-		 * waiting time found.
+		 * priority or waiting
+		 * time found.
 		 */
-		if (p->counter > next->counter)
+		if ((priorityOfP < priorityOfNext)
+		||  (priorityOfP == priorityOfNext && p->counter > next->counter))
 		{
 			next->counter++;
 			next = p;
@@ -109,7 +114,11 @@ PUBLIC void yield(void)
 		 * time of process.
 		 */
 		else
-			p->counter++;
+			if (p->counter < 5) {
+				p->nice--;
+			} else {
+				p->counter++;
+			}
 	}
 	
 	/* Switch to next process. */
