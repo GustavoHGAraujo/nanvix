@@ -95,10 +95,10 @@ PUBLIC void yield(void)
 			continue;
 		
 		/*
-		 * Process with higher
-		 * waiting time found.
+		 * Process with lower
+		 * arrival time found.
 		 */
-		if (p->counter > next->counter)
+		if (p != IDLE || p->nice < next->nice)
 		{
 			next->counter++;
 			next = p;
